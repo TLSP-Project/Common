@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>TLSP.Common</id>
+    <version>1.0.0</version>
+    <title></title>
+    <authors>TLSP Dev</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>杜绝重复造轮子</description>
+    <license type="expression">MIT</license>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+       <dependency id="Microsoft.Extensions.Logging.Abstractions" version="6.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <repository type="git" url="https://github.com/TLSPDev/Common.git" branch="main" />
+    <projectUrl>https://github.com/TLSPDev/Common</projectUrl>
+  	<copyright>Copyright © 2022 TLSP Dev.All Rights Reserved.</copyright>
+  </metadata>
+  <files>
+    <file src="bin\Release\" target="lib\" />
+  </files>
+</package>
