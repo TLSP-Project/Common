@@ -8,22 +8,44 @@ namespace TLSP.Common.Utilities
     {
         public static OSPlatform Platform { get; }
         public static string UserProfile { get; }
-        public static string DataBase { get; }
-        public static string JavaMCBase { get ; }
-        public static string CacheBase { get; }
-        public static string GameBase { get; }
+        public static string UserDataBase { get; }
+        private static string _dataBase;
+        public static string DataBase { 
+            get {
+                if (string.IsNullOrEmpty(_dataBase))
+                {
+                    _dataBase = Path.Combine(UserDataBase, "TLSP");
+                }
+                return _dataBase;    
+            } 
+            set { 
+                _dataBase = value;
 
+                if (Platform == OSPlatform.OSX) {
+                    CacheBase = Path.Combine(UserProfile, "Library", "Caches", "TLSP");
+                }
+                else
+                {
+                    CacheBase = Path.Combine(_dataBase, "Caches");
+                }
 
+                GameBase = Path.Combine(_dataBase, "Games");
 
-
-        //public static string ComponentCacheBase { get => CacheBase + @"component\"; }
-        //public static string TempCacheBase { get => CacheBase + @"temp\"; }
-        //public static string SkinCacheBase { get => CacheBase + @"skin\"; }
+                FileHelper.SafeCreateDir(_dataBase);
+                FileHelper.SafeDelete(CacheBase);
+                FileHelper.SafeCreateDir(CacheBase);
+                FileHelper.SafeCreateDir(GameBase);
+            }
+        }
+        /// <summary>
+        /// .minecraft路径 用户可自定义
+        /// </summary>
+        public static string JavaMCBase { get; set; }
+        public static string CacheBase { get; private set; }
+        public static string GameBase { get; private set; }
 
         static EnvironmentHelper()
         {
-
-            
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 Platform = OSPlatform.Windows;
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -35,39 +57,20 @@ namespace TLSP.Common.Utilities
 
             UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            
-
             if (Platform == OSPlatform.Windows)
             {
-                DataBase = Path.Combine(UserProfile, "AppData", "Roaming");
-                JavaMCBase = Path.Combine(DataBase,".minecraft");
-                
+                UserDataBase = Path.Combine(UserProfile, "AppData", "Roaming");                
             }
             else if (Platform == OSPlatform.OSX)
             {
-                DataBase = Path.Combine(UserProfile, "Library", "Application Support");
-                JavaMCBase = Path.Combine(DataBase, "minecraft");
-                CacheBase = Path.Combine(UserProfile, "Library", "Caches", "TLSP");
+                UserDataBase = Path.Combine(UserProfile, "Library", "Application Support");
             }
             else
             {
-                DataBase = UserProfile;
-                JavaMCBase = Path.Combine(DataBase, ".minecraft");
+                UserDataBase = UserProfile;
             }
-                
 
-            DataBase = Path.Combine(DataBase, "TLSP");
-
-            if (CacheBase == null)
-                CacheBase = Path.Combine(DataBase,"Caches");
-
-            GameBase = Path.Combine(DataBase, "Games");
-
-            FileHelper.SafeCreateDir(DataBase);
-            FileHelper.SafeDelete(CacheBase);
-            FileHelper.SafeCreateDir(CacheBase);
-            FileHelper.SafeCreateDir(GameBase);
-
+            JavaMCBase = Path.Combine(UserDataBase, ".minecraft");
         }
     }
 }
