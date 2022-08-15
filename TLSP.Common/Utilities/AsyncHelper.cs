@@ -115,7 +115,7 @@ namespace TLSP.Common.Utilities
                         task.Item1(task.Item2);
                         if (InnerException != null) // the method threw an exeption
                         {
-                            throw new AggregateException("运行时异常:", InnerException);
+                            throw new AggregateException("运行时异常: ", InnerException);
                         }
                     }
                     else

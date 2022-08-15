@@ -28,6 +28,10 @@ namespace TLSP.Common.Extensions
         /// <exception cref="FormatException"></exception>
         public static byte[] HexToBytes(this string hex)
         {
+            if (string.IsNullOrEmpty(hex))
+            {
+                return null;
+            }
 
             byte[] bytes = new byte[hex.Length / 2];
 
